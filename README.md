@@ -22,10 +22,6 @@ The Perfume Recommendation System is a Flask-based web application that recommen
 - Inspired by various perfume databases and recommendation systems.
 - Uses Bootstrap for frontend styling.
 
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
 ## References
 
 - [1] https://www.fragrantica.com/
