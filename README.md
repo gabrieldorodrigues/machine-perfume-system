@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Perfume Recommendation System is a Flask-based web application that recommends perfumes similar to a selected perfume. It uses K-means clustering and cosine similarity to group perfumes by their notes and find the most similar ones within the same cluster. The system provides recommendations based on the similarity percentage of perfume notes.
+The Perfume Recommendation System is a Flask-based web application that recommends perfumes similar to a selected perfume. The system provides recommendations based on the similarity percentage of perfume notes.
 
 ## Features
 
