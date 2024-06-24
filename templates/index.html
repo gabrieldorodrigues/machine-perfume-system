@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfume Recommendation System</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        .recommendation {
+            margin-top: 20px;
+        }
+        .recommendation h4 {
+            margin-top: 10px;
+        }
+        .recommendation p {
+            margin-bottom: 5px;
+        }
+        .btn-primary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-primary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        .alert {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Perfume Recommendation System</h1>
+        <form id="recommendation-form" class="form-inline justify-content-center mt-4">
+            <label for="perfume_name" class="sr-only">Perfume Name</label>
+            <input type="text" id="perfume_name" name="perfume_name" class="form-control mb-2 mr-sm-2" placeholder="Enter Perfume Name" required>
+            <button type="submit" class="btn btn-primary mb-2">Get Recommendations</button>
+        </form>
+        <div id="recommendations" class="recommendation">
+            <!-- Recommendations will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('recommendation-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const perfumeName = document.getElementById('perfume_name').value;
+            
+            fetch('/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `perfume_name=${encodeURIComponent(perfumeName)}`
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Perfume not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                let recommendationsDiv = document.getElementById('recommendations');
+                recommendationsDiv.innerHTML = `
+                    <div class="alert alert-info">
+                        <h4>Selected Perfume</h4>
+                        <p><strong>${data.selected_perfume.brand} - ${data.selected_perfume.name}</strong></p>
+                        <p>${data.selected_perfume.notes}</p>
+                    </div>
+                    <h4>Recommendations</h4>
+                `;
+                data.recommendations.forEach(perfume => {
+                    recommendationsDiv.innerHTML += `
+                        <div class="alert alert-secondary">
+                            <p><strong>${perfume.brand} - ${perfume.name}</strong></p>
+                            <p>${perfume.notes}</p>
+                            <p>Similarity: ${perfume.similarity}%</p>
+                        </div>
+                    `;
+                });
+            })
+            .catch(error => {
+                document.getElementById('recommendations').innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
