@@ -29,7 +29,7 @@ def recommend():
     # Calculate cosine similarities
     similarities = cosine_similarity(perfume_vector, df_vectors).flatten()
 
-    # Get the top 5 most similar perfumes (excluding itself)
+    # Get the top 10 most similar perfumes (excluding itself)
     similar_indices = similarities.argsort()[::-1][1:10]
     similar_scores = similarities[similar_indices]
     similar_perfumes = df.iloc[similar_indices][['brand', 'name', 'notes']]
